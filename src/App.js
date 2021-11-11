@@ -42,13 +42,31 @@ const useSemiPersistentState = (key, initialState) => {
   return [value, setValue];
 };
 
+// Using useReducer instead of useState
+
+const storiesReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_STORIES':
+      return action.payload;
+    case 'REMOVE_STORY':
+      return state.filter(
+        story => action.payload.objectID !== story.objectID
+      );
+    default:
+      throw new Error();
+  }
+}
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState(
     'search',
     'React'
   );
 
-  const [stories, setStories] = React.useState([]);
+  const [stories, dispatchStories] = React.useReducer(
+    storiesReducer,
+    []
+  );
 
   // Building a loader
   const [isLoading, setIsLoading] = React.useState(false);
@@ -62,18 +80,20 @@ const App = () => {
 
     getAsyncStories()
     .then(result => {
-      setStories(result.data.stories);
+      dispatchStories({
+        type: 'SET_STORIES',
+        payload: result.data.stories,
+      });
       setIsLoading(false)
     })
     .catch(() => setIsError(true));
   }, [])
 
   const handleRemoveStory = item => {
-    const newStories = stories.filter(
-      story => item.objectID !== story.objectID
-    );
-
-    setStories(newStories);
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: item,
+    });
   };
 
   const handleSearch = event => {
