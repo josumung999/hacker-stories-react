@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 
 
 const useSemiPersistentState = (key, initialState) => {
@@ -76,12 +77,12 @@ const App = () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
 
-    fetch(url) // Step 2
-      .then(response => response.json()) // step 3
+    axios
+      .get(url)
       .then(result => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits, // Step 4
+          payload: result.data.hits,
         });
       })
     .catch(() => 
