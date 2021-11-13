@@ -60,6 +60,10 @@ const App = () => {
     'React'
   );
 
+  const [url, setUrl] = React.useState(
+    `${API_ENDPOINT}${searchTerm}`
+  );
+
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer,
     { data: [], isLoading: false, isError: false }
@@ -68,12 +72,11 @@ const App = () => {
   // Setting up Memoized handler for learning purpose
   // Step A
   const handleFetchStories = React.useCallback(() => {
-    if (!searchTerm === '') return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
 
-    fetch(`${API_ENDPOINT}${searchTerm}`) // Step 2
+    fetch(url) // Step 2
       .then(response => response.json()) // step 3
       .then(result => {
         dispatchStories({
@@ -84,7 +87,7 @@ const App = () => {
     .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
     );
-  }, [searchTerm]); // Step E
+  }, [url]); // Step E
 
   React.useEffect(() => {
     handleFetchStories(); // Step C
@@ -97,9 +100,13 @@ const App = () => {
     });
   };
 
-  const handleSearch = event => {
+  const handleSearchInput = event => {
     setSearchTerm(event.target.value);
   };
+
+  const handleSearchSubmit = event => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`)
+  }
 
   return (
     <div>
@@ -109,10 +116,18 @@ const App = () => {
         id="search"
         value={searchTerm}
         isFocused
-        onInputChange={handleSearch}
+        onInputChange={handleSearchInput}
       >
         <strong>Search:</strong>
       </InputWithLabel>
+
+      <button
+        type="button"
+        disabled={!searchTerm}
+        onClick={handleSearchSubmit}
+      >
+        Submit
+      </button>
 
       <hr />
 
