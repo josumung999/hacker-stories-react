@@ -65,7 +65,9 @@ const App = () => {
     { data: [], isLoading: false, isError: false }
   );
   
-  React.useEffect(() => {
+  // Setting up Memoized handler for learning purpose
+  // Step A
+  const handleFetchStories = React.useCallback(() => {
     if (!searchTerm === '') return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
@@ -82,7 +84,11 @@ const App = () => {
     .catch(() => 
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
     );
-  }, [searchTerm])
+  }, [searchTerm]); // Step E
+
+  React.useEffect(() => {
+    handleFetchStories(); // Step C
+  }, [handleFetchStories]); // Step D
 
   const handleRemoveStory = item => {
     dispatchStories({
