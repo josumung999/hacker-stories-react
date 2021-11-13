@@ -72,22 +72,20 @@ const App = () => {
   
   // Setting up Memoized handler for learning purpose
   // Step A
-  const handleFetchStories = React.useCallback(() => {
-
+  const handleFetchStories = React.useCallback( async () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
+    try {
+      const result = await axios.get(url);
 
-    axios
-      .get(url)
-      .then(result => {
-        dispatchStories({
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.hits,
-        });
+      dispatchStories({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.data.hits
       })
-    .catch(() => 
+    } catch {
       dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-    );
+    }
+    
   }, [url]); // Step E
 
   React.useEffect(() => {
