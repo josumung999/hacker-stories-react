@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios'
 import styled from 'styled-components';
 
+import { ReactComponent as Check } from './check.svg';
+
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -101,7 +103,10 @@ const StyledButton = styled.button`
 
   &:hover {
     background: #171212;
-    color: #fff;
+  }
+  &:hover > svg > g {
+    fill: #ffffff;
+    stroke: #ffffff;
   }
 `;
 
@@ -267,7 +272,7 @@ const Item = ({ item, onRemoveItem }) => (
         type="button"
         onClick={() => onRemoveItem(item)}
       >
-        Dismiss
+        <Check width="18px" height="18px" />
       </StyledButtonSmall>
     </StyledColumn>
   </StyledItem>
