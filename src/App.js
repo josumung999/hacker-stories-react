@@ -5,12 +5,18 @@ import styled from 'styled-components';
 import { ReactComponent as Check } from './check.svg';
 
 const useSemiPersistentState = (key, initialState) => {
+  const isMounted = React.useRef(false);
+
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
   );
 
   React.useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
@@ -138,6 +144,16 @@ const StyledInput = styled.input`
   font-size: 24px;
 `;
 
+// Getting the sum of comments
+const getSumComments = stories => {
+  console.log('C');
+
+  return stories.data.reduce(
+   (result, value) => result + value.num_comments,
+   0 
+  );
+};
+
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState(
@@ -176,12 +192,12 @@ const App = () => {
     handleFetchStories(); // Step C
   }, [handleFetchStories]); // Step D
 
-  const handleRemoveStory = item => {
+  const handleRemoveStory = React.useCallback(item => {
     dispatchStories({
       type: 'REMOVE_STORY',
       payload: item,
     });
-  };
+  }, []);
 
   const handleSearchInput = event => {
     setSearchTerm(event.target.value);
@@ -193,9 +209,15 @@ const App = () => {
     event.preventDefault();
   }
 
+  console.log('B:App');
+
+  const sumComments = React.useMemo(() => getSumComments(stories), [
+    stories,
+  ]);
+
   return (
     <StyledContainer>
-      <StyledHeadlinePrimary>My Hacker Stories</StyledHeadlinePrimary>
+      <StyledHeadlinePrimary>My Hacker Stories with {sumComments} comments </StyledHeadlinePrimary>
 
       <SearchForm 
         searchTerm={searchTerm}
@@ -250,14 +272,18 @@ const InputWithLabel = ({
   );
 };
 
-const List = ({ list, onRemoveItem }) =>
-  list.map(item => (
-    <Item
-      key={item.objectID}
-      item={item}
-      onRemoveItem={onRemoveItem}
-    />
-  ));
+const List =  React.memo(
+  ({ list, onRemoveItem }) =>
+    console.log('B:List') ||
+    list.map(item => (
+      <Item
+        key={item.objectID}
+        item={item}
+        onRemoveItem={onRemoveItem}
+      />
+    ))
+);
+
 
 const Item = ({ item, onRemoveItem }) => (
   <StyledItem>
