@@ -250,7 +250,7 @@ const InputWithLabel = ({
   const inputRef = React.useRef();
 
   React.useEffect(() => {
-    if (isFocused) {
+    if (isFocused && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isFocused]);
@@ -329,3 +329,5 @@ const SearchForm = ({
 );
 
 export default App;
+
+export { SearchForm, InputWithLabel, List, Item };

@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputWithLabel renders snapshot 1`] = `
+Array [
+  <label
+    className="sc-furwcr iUkJpt"
+    htmlFor="1"
+  >
+    Input with Label
+  </label>,
+  " ",
+  <input
+    className="sc-pVTFL dCeauB"
+    id="1"
+    type="text"
+    value="a"
+  />,
+]
+`;
+
+exports[`Item renders snapshot 1`] = `
+<div
+  className="sc-dkPtRN etXwlP"
+>
+  <span
+    className="sc-hKwDye hnlWVS"
+    width="40%"
+  >
+    <a
+      href="https://reactjs.org/"
+    >
+      React
+    </a>
+  </span>
+  <span
+    className="sc-hKwDye hnmLBt"
+    width="30%"
+  >
+    Jordan Walke
+  </span>
+  <span
+    className="sc-hKwDye hnnkCn"
+    width="10%"
+  >
+    3
+  </span>
+  <span
+    className="sc-hKwDye hnnkCn"
+    width="10%"
+  >
+    4
+  </span>
+  <span
+    className="sc-hKwDye hnnkCn"
+    width="10%"
+  >
+    <button
+      className="sc-eCImPb sc-jRQBWg hNaiVK ikKajx"
+      onClick={[Function]}
+      type="button"
+    >
+      <svg
+        height="18px"
+        width="18px"
+      >
+        check.svg
+      </svg>
+    </button>
+  </span>
+</div>
+`;
