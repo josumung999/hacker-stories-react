@@ -2,7 +2,10 @@ import React from 'react';
 import axios from 'axios'
 import styled from 'styled-components';
 
-import { ReactComponent as Check } from './check.svg';
+import SearchForm from './SearchForm';
+import List from './List';
+import InputWithLabel from './InputWithLabel';
+
 
 const useSemiPersistentState = (key, initialState) => {
   const isMounted = React.useRef(false);
@@ -79,70 +82,7 @@ const StyledHeadlinePrimary = styled.h1`
   letter-spacing: 2px;
 `;
 
-const StyledItem = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 5px;
-`;
 
-const StyledColumn = styled.span`
-  padding: 0 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  a {
-    color: inherit;
-  }
-
-  width: ${props => props.width};
-`;
-
-const StyledButton = styled.button`
-    background-color: transparent;
-  border: 1px solid #171212;
-  padding: 5px;
-  cursor: pointer;
-
-  transition: all 0.1s ease-in;
-
-  &:hover {
-    background: #171212;
-  }
-  &:hover > svg > g {
-    fill: #ffffff;
-    stroke: #ffffff;
-  }
-`;
-
-const StyledButtonSmall = styled(StyledButton)`
-  padding: 5px;
-`;
-
-const StyledButtonLarge = styled(StyledButton)`
-  padding: 10px;
-`;
-
-const StyledSearchForm = styled.form`
-  padding: 10px 0 20px 0;
-  display: flex;
-  align-items: baseline;
-`;
-
-const StyledLabel = styled.label`
-  border-top: 1px solid #171212;
-  border-left: 1px solid #171212;
-  padding-left: 5px;
-  font-size: 24px;
-`;
-
-const StyledInput = styled.input`
-  border: none;
-  border-bottom: 1px solid #171212;
-  background-color: transparent;
-  font-size: 24px;
-`;
 
 // Getting the sum of comments
 const getSumComments = stories => {
@@ -239,95 +179,8 @@ const App = () => {
   );
 };
 
-const InputWithLabel = ({
-  id,
-  value,
-  type = 'text',
-  onInputChange,
-  isFocused,
-  children,
-}) => {
-  const inputRef = React.useRef();
 
-  React.useEffect(() => {
-    if (isFocused && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isFocused]);
-
-  return (
-    <>
-      <StyledLabel htmlFor={id}>
-        {children}
-      </StyledLabel>
-      &nbsp;
-      <StyledInput
-        ref={inputRef}
-        id={id}
-        type={type}
-        value={value}
-        onChange={onInputChange}
-      />
-    </>
-  );
-};
-
-const List =  React.memo(
-  ({ list, onRemoveItem }) =>
-    console.log('B:List') ||
-    list.map(item => (
-      <Item
-        key={item.objectID}
-        item={item}
-        onRemoveItem={onRemoveItem}
-      />
-    ))
-);
-
-
-const Item = ({ item, onRemoveItem }) => (
-  <StyledItem>
-    <StyledColumn width="40%">
-      <a href={item.url}>{item.title}</a>
-    </StyledColumn>
-    <StyledColumn width="30%">{item.author}</StyledColumn>
-    <StyledColumn width="10%">{item.num_comments}</StyledColumn>
-    <StyledColumn width="10%">{item.points}</StyledColumn>
-    <StyledColumn width="10%">
-      <StyledButtonSmall
-        type="button"
-        onClick={() => onRemoveItem(item)}
-      >
-        <Check width="18px" height="18px" />
-      </StyledButtonSmall>
-    </StyledColumn>
-  </StyledItem>
-);
-
-const SearchForm = ({
-  searchTerm,
-  onSearchInput,
-  onSearchSubmit,
-}) => (
-  <StyledSearchForm onSubmit={onSearchSubmit}>
-    <InputWithLabel
-      id="search"
-      value={searchTerm}
-      isFocused
-      onInputChange={onSearchInput}
-    >
-      <strong>Search:</strong>
-    </InputWithLabel>
-
-    <StyledButtonLarge
-      type="submit"
-      disabled={!searchTerm}
-    >
-      Submit
-    </StyledButtonLarge>
-  </StyledSearchForm>
-);
 
 export default App;
 
-export { SearchForm, InputWithLabel, List, Item };
+export { SearchForm, InputWithLabel, List };
